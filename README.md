@@ -3,7 +3,9 @@
 
 This repo is designed to extract contract information from the files in `./data/raw_data` and collate them them into a dataset for project performance analysis. The raw files are taken from the US department of defence public website. The output dataset can be found at `./data/datasets/dataset-for-overrun-analysis.csv`. This dataset contains all information from each contract over the DoD reports condensed into a single row per contract.
 
-The sections of this readme contain the following:
+## Contents of readme
+
+- Directory guide: Guide to the layout of files in the repo
 
 - Dataset: This contains descriptions and visualisations of the final dataset
 
@@ -12,6 +14,10 @@ The sections of this readme contain the following:
 - Notebooks: Descriptions of files in `./notebooks` directory
 
 - Datasets: Descriptions of files in `./data/datasets` directory
+
+## Directory guide
+
+TODO
 
 ## Dataset
 
