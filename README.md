@@ -324,11 +324,19 @@ Contract information will be updated throughout multiple raw files. For this rea
 - "Project title" is generic in many cases - i.e., the same project titles will be reused for contracts with different project numbers. So, project title is also not sufficient for a unique identifier of contracts
 
 #### Solution:
-- TODO
+- Remove all data that do not have project numbers
+- Produce unique ID by concatenating project number and title
+- Remove all unique IDs which have changing estimated costs or estimated completions
+- This leaves the dataset with unique IDs that are matched to a single set of cost and schedule estimates
 
 ### Completion percentage
 
-For raw data published pre-2015, completion percentage amounts were recorded for each contract. However, after 2015, only entire projects had a completion percentage recorded for them. This means we do not know the completion percentage of the individual contracts, if there are multiple associated with a project.
+The completion percentage appears to be a measure of work done. It does not align to the dates that the data were recorded (which I use "data as of date" and "submission date")
+as indicators relative to the contract award date, solicitation date or construction start date, and the current end date of the contract or the placed in service date. **This
+means that the percentage complete values do not appear to be calculations from the other data features.**
+
+For raw data published pre-2016, completion percentage amounts were recorded for each contract. However, from 2016, only entire projects had a completion percentage 
+recorded for them. This means we do not know the completion percentage of the individual contracts, if there are multiple associated with a project.
 
 #### Problems
 - We can only know the completion percentage of a contract if there are no other contracts associated with the project post-2015, OR
@@ -340,7 +348,26 @@ For raw data published pre-2015, completion percentage amounts were recorded for
 - Complete contract data pre-2015 has been saved
 - All other datapoints are omitted from the final dataset
 
-### Data cleaning & assumptions made
+### Dates
+
+In general, the dates go in the following order (bar some anomolies):
+
+1. Solicitation date
+2. Award date
+3. Start date
+4. Completion date
+5. Placed in service date
+6. Data as of date
+7. Submission date
+
+The biggest ambiguities in this are with:
+
+- "Data as of Date" and "Submission date", where in 36% of cases submission date comes before data as of date.
+
+- "Placed in service date" and "Actual completion date" where in 31% of cases, completion date comes after placed in service date. 
+
+- There are variations in which came first out of "data as of date" and "place in service date", but this makes sense as we have data both during and after projects
+
 
 ## Notebooks
 
