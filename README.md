@@ -1,23 +1,22 @@
 
 ## Introduction
 
-This repo is designed to extract contract information from the files in `./data/raw_data` and collate them them into a dataset for project performance analysis. The raw files are taken from the US department of defence public website. The output dataset can be found at `./data/datasets/dataset-for-overrun-analysis.csv`. This dataset contains all information from each contract over the DoD reports condensed into a single row per contract.
+This repo is desgined to produce a dataset from the raw files in `data/raw_data`
+
+This dataset contains all information from each contract over the DoD reports condensed into a single row per contract.
+
+There are 1188 contracts in total.
+
+The raw files are taken from the US department of defence public website.
 
 ## Contents of readme
 
-- Directory guide: Guide to the layout of files in the repo
-
 - Dataset: This contains descriptions and visualisations of the final dataset
 
-- Methodology: TODO
+- Methodology: Sets out issues encountered within the data and what solutions were decided on
 
-- Notebooks: Descriptions of files in `./notebooks` directory
+- Directory: Guide to the layout of files in the repo
 
-- Datasets: Descriptions of files in `./data/datasets` directory
-
-## Directory guide
-
-TODO
 
 ## Dataset
 
@@ -25,37 +24,58 @@ Final dataset is stored in `./data/datasets/dataset-for-overrun-analysis.csv`.
 
 Each row contains all available information throughout project progress stages for a single contract.
 
-### Columns:
+### Columns
 
-`unique_id` - Concetanation of project number and contract title
+| Column | Description |
+|--------|-------------|
+|`unique_id`| Concetanation of project number and contract title |
+|`project_subtype` | Category of project, i.e. "General buildings", "Training facility", etc |
+|`project_subtype_two` | Subcategory of project, i.e. type of building or training facility |
+|`archive_filename` | Raw milcon .xlsx file where contract data *first* appeared |
+| `start_date` | Start of contract work |
+|`estimated_completion_date` | Original contract completion date |
+| `actual_completion_date` | Current expected completion date, taken from latest available project update (where "latest" is judged by highest completion percentage) |
+|`estimated_duration` | Calculated as the time difference between start date and original completion date |
+|`actual_duration` | Calculated as the time difference between start date current expected completion date (where current completion used is from latest project update, in terms of completion percentage) |
+|`fiscal_year` | Fiscal year for cost information |
+|`estimated_cost` | Original contract obligation |
+|`estimated_cost_nocontingency` | Original contract obligation, with assumed 5% contingency stripped |
+|`final_cost` | Current contract obligation, taken from latest available project update (where "latest" is judged by highest completion percentage) |
+|`cost_pct[x]` | 10 columns containing ratios of actual/estimated cost (using estimated cost with contingency stripped). Different columns represent data from different "completion percentage buckets". For instance, data marked between 0-10% completion in `cost_pct0`, data between 10-20% completion in `cost_pct10`, and so on. Thus, the data represent changes in expected spend over stages of project completion. *Note: Where contracts have multiple entries within the same percentage bucket, data with the highest completion percentage was selected to represent that bucket. i.e., if data are available at 18% and 19%, the data at 19% will represent cost overrun at the 10-20% completion bucket* |
+|`schedule_pct[x]` | 10 columns containing ratios of actual/estimated durations. Different columns represent data from different "completion percentage buckets". For instance, data marked between 0-10% completion in `schedule_pct0`, data between 10-20% completion in `schedule_pct10`, and so on. Thus, the data represent changes in expected duration over stages of project completion. *Note: Where contracts have multiple entries within the same percentage bucket, data with the highest completion percentage was selected to represent that bucket. i.e., if data are available at 18% and 19%, the data at 19% will represent schedule overrun at the 10-20% completion bucket* |
 
-`project_subtype` - Category of project, i.e. "General buildings", "Training facility", etc
 
-`project_subtype_two` - Subcategory of project, i.e. type of building or training facility
+### Descriptive stats
 
-`archive_filename` - Raw milcon .xlsx file where contract data *first* appeared
+Describe numerical datapoints
 
-`start_date` - Start of contract work
+|                              |   count |           mean |         std |           min |            25% |            50% |            75% |            max |
+|------------------------------|---------|----------------|-------------|---------------|----------------|----------------|----------------|----------------|
+| fiscal_year                  |    1187 | 2010.59        | 1.22887     | 2006          | 2010           | 2011           | 2011           | 2014           |
+| estimated_cost               |    1188 |    1.987e+08   | 2.45419e+09 | 1380          |    5.28975e+06 |    1.2181e+07  |    2.50428e+07 |    5.08861e+10 |
+| estimated_cost_nocontingency |    1188 |    1.89238e+08 | 2.33732e+09 | 1314.29       |    5.03786e+06 |    1.1601e+07  |    2.38502e+07 |    4.8463e+10  |
+| final_cost                   |    1188 |    1.88244e+08 | 2.29714e+09 | 1498          |    5.73075e+06 |    1.27652e+07 |    2.66012e+07 |    5.08474e+10 |
+| cost_pct0                    |      96 |    1.00882     | 0.0996458   |    0.559462   |    0.986697    |    1.05        |    1.05        |    1.32597     |
+| schedule_pct0                |      80 |    1.06629     | 0.222765    |    0.502479   |    1           |    1           |    1.00916     |    2.34074     |
+| cost_pct10                   |      95 |    1.02781     | 0.0827921   |    0.670431   |    0.991412    |    1.05        |    1.05597     |    1.31718     |
+| schedule_pct10               |      81 |    1.13503     | 0.338331    |    0.502479   |    1           |    1           |    1.13786     |    2.73485     |
+| cost_pct20                   |      95 |    1.0142      | 0.0742292   |    0.755909   |    0.981673    |    1.04253     |    1.05619     |    1.26378     |
+| schedule_pct20               |      85 |    1.16934     | 0.350374    |    0.648649   |    1           |    1.03279     |    1.18192     |    2.90625     |
+| cost_pct30                   |     119 |    1.01465     | 0.072578    |    0.758068   |    0.985892    |    1.0426      |    1.05597     |    1.14525     |
+| schedule_pct30               |     111 |    1.27475     | 0.90023     |    0.502479   |    1           |    1.03968     |    1.24424     |    7.7         |
+| cost_pct40                   |     127 |    1.01682     | 0.0982647   |    0.544046   |    0.985117    |    1.0383      |    1.06083     |    1.36359     |
+| schedule_pct40               |     115 |    1.42817     | 1.28964     |    0.704132   |    1           |    1.08885     |    1.34547     |   10.7258      |
+| cost_pct50                   |     127 |    1.0198      | 0.101476    |    0.548839   |    0.988626    |    1.05        |    1.05701     |    1.37256     |
+| schedule_pct50               |     120 |    1.29657     | 0.968411    |    0.648649   |    1           |    1.07172     |    1.27901     |   10.7258      |
+| cost_pct60                   |     188 |    1.16661     | 1.86788     |    0.555511   |    0.989667    |    1.05        |    1.07181     |   26.5867      |
+| schedule_pct60               |     174 |    1.37616     | 1.00242     |    0.704132   |    1           |    1.10738     |    1.36981     |   10.7258      |
+| cost_pct70                   |     257 |    1.14149     | 1.62493     |    0.635297   |    0.989177    |    1.05        |    1.0747      |   27.0264      |
+| schedule_pct70               |     244 |    1.37893     | 0.904033    |    0.449807   |    1.03305     |    1.15479     |    1.42788     |   10.7258      |
+| cost_pct80                   |     343 |    1.15394     | 1.41381     |    0.672915   |    1.00732     |    1.05723     |    1.10693     |   27.0264      |
+| schedule_pct80               |     316 |    1.47903     | 0.885817    |    0.806971   |    1.081       |    1.25295     |    1.52834     |   10.7258      |
+| cost_pct90                   |    1188 |    1.16502     | 1.14782     |    0.559462   |    1.0194      |    1.06704     |    1.11981     |   27.3312      |
+| schedule_pct90               |    1057 |    1.6433      | 1.10006     |    0.52518    |    1.12857     |    1.37105     |    1.72513     |   14.44        |
 
-`estimated_completion_date` - Original contract completion date
-
-`actual_completion_date` - Current expected completion date, taken from latest available project update (where "latest" is judged by highest completion percentage)
-
-`estimated_duration` - Calculated as the time difference between start date and original completion date
-
-`actual_duration` - Calculated as the time difference between start date current expected completion date (where current completion used is from latest project update, in terms of completion percentage)
-
-`fiscal_year` - Fiscal year for cost information
-
-`estimated_cost` - Original contract obligation
-
-`estimated_cost_nocontingency` - Original contract obligation, with assumed 5% contingency stripped
-
-`final_cost` - Current contract obligation, taken from latest available project update (where "latest" is judged by highest completion percentage)
-
-`cost_pct[x]` - 10 columns containing ratios of actual/estimated cost (using estimated cost with contingency stripped). Different columns represent data from different "completion percentage buckets". For instance, data marked between 0-10% completion in `cost_pct0`, data between 10-20% completion in `cost_pct10`, and so on. Thus, the data represent changes in expected spend over stages of project completion. *Note: Where contracts have multiple entries within the same percentage bucket, data with the highest completion percentage was selected to represent that bucket. i.e., if data are available at 18% and 19%, the data at 19% will represent cost overrun at the 10-20% completion bucket*
-
-`schedule_pct[x]` - 10 columns containing ratios of actual/estimated durations. Different columns represent data from different "completion percentage buckets". For instance, data marked between 0-10% completion in `schedule_pct0`, data between 10-20% completion in `schedule_pct10`, and so on. Thus, the data represent changes in expected duration over stages of project completion. *Note: Where contracts have multiple entries within the same percentage bucket, data with the highest completion percentage was selected to represent that bucket. i.e., if data are available at 18% and 19%, the data at 19% will represent schedule overrun at the 10-20% completion bucket*
 
 ### Taxonomy
 
@@ -319,7 +339,25 @@ Breakdowns of actual cost and schedule distributions can be found in `./notebook
 
 ## Methodology
 
-### Raw files schema
+### Features from the raw data not included in the final dataset
+
+These features *can* be found in other datasets, i.e. in `unique-contracts-coded.xlsx`
+
+- **Submission date:** to do with when the data are relevent for I think (i.e. when collected/recorded)
+
+- **Data as of date:** to do with when the data are relevent for I think (i.e. when collected/recorded)
+
+- **Component:** to do with sector I think. i.e., "Army", "Air force", etc.
+
+- **Project type:** category, usually with "minor" or "major" contruction, although some other instances include: "family housing", "brac"
+
+- **Country/state code:** Country code (iso3) or state code, i.e. california = CA
+
+- **Country/state name:** Name of country or state
+
+- **Installation:** Where the work was done, i.e. "Pentagon"
+
+- **Solicitation date:**
 
 ### Unique IDs
 
@@ -374,12 +412,52 @@ The biggest ambiguities in this are with:
 
 - There are variations in which came first out of "data as of date" and "place in service date", but this makes sense as we have data both during and after projects
 
+### Fiscal year
 
-## Notebooks
+The fiscal year is usually consistent with the year of the solicitation date. It never changes throughout project updates, even as the "data as of date" 
+advances throughout the years. Therefore it is assumed that all reported costs adhere to this cost year.
 
+### Removing outliers
 
-## Datasets
+Some projects contained:
+- Overrun ratios of greater than 100
+- negative durations (because start dates are later completion dates)
+
+This was the case in a tiny handful of projects - so these have just been removed, assuming that they are errors. The details of this process and examples from the data are
+available in `notebooks/03: Create dataset for analysis.ipynb`
+
+### Contingency
+
+5% contingency is assumed to be included within the contract original budgets. So this 5% is manually stripped from the original contract amounts 
+before cost overruns are calculated. 
+
+## Directory
+
+### `notebooks`
+
+- `01: Extract Dataset From Raw Sheets.ipynb` - This notebook extracts the data from each of the source excel files, and homegnises the column headings. Exports a total
+sheet of all rows of data.
+
+- `02: Explore raw data structure.ipynb` - This notebook takes a closer look at the available features in the data, and reduces the set to contracts that can be uniquely
+identified. (i.e., removing rows where it is vague wether or not multiple rows belong to the same contract, or different ones)
+
+- `03: Create dataset for analysis.ipynb` - This notebook takes the unique contracts (after they had been manually coded into subtype and subtype 2) and "pivots" them, such
+that each row matches to a single contract, where cost and schedule updates are included in different columns. In this notebook, outliers or nonsensical data points 
+(such as negative durations) are inspected and sometimes trimmed from the dataset.
+
+- `04: Descriptive analysis.ipynb` - Visualisations and descriptive statistics on the final dataset.
+
+### `data`
+
+#### `datasets`
+
 - `all-contracts.csv` - Total full dataset after scraping together from raw milcon files
 - `all-unique-contracts.csv` - Dataset with vaguely named contracts removed, leaving contracts which we can be sure are unique
 - `unique-contracts-coded.xlsx` - Spreadsheet containing manually encoded categories for each unique contract in `all-unique-contracts-dataset.csv`
 - `dataset-for-overrun-analysis.csv` - Final dataset for analysis. All data entries aggregated so that each row reflects a single project, with overrun data at different stages entered in to different columns.
+
+#### `raw_data`
+
+### `plots`
+
+Exports of visulisations produced in analysis that are used by this document.
