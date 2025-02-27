@@ -62,7 +62,7 @@ Each row contains all available information throughout project progress stages f
 
 | Column | Description |
 |--------|-------------|
-|`unique_id`| Concetanation of project number and contract title |
+|`unique_id`| Concatanation of project number and contract title. Uniuqe to each row |
 |`project_subtype` | Category of project, i.e. "General buildings", "Training facility", etc |
 |`project_subtype_two` | Subcategory of project, i.e. type of building or training facility |
 |`archive_filename` | Raw milcon .xlsx file where contract data *first* appeared |
@@ -70,7 +70,7 @@ Each row contains all available information throughout project progress stages f
 |`estimated_completion_date` | Original contract completion date |
 | `actual_completion_date` | Current expected completion date, taken from latest available project update (where "latest" is judged by highest completion percentage) |
 |`estimated_duration` | Calculated as the time difference between start date and original completion date |
-|`actual_duration` | Calculated as the time difference between start date current expected completion date (where current completion used is from latest project update, in terms of completion percentage) |
+|`actual_duration` | Calculated as the time difference between start date current expected completion date (where current completion used is from latest project update, determined by completion percentage) |
 |`fiscal_year` | Fiscal year for cost information |
 |`estimated_cost` | Original contract obligation |
 |`estimated_cost_nocontingency` | Original contract obligation, with assumed 5% contingency stripped |
