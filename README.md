@@ -398,7 +398,7 @@ These features *can* be found in other datasets, i.e. in `unique-contracts-coded
 Contract information will be updated throughout multiple raw files. For this reason, unique IDs needed to be constructed out of contract data so that individual contracts could be tracked and identified throughout multiple updates. 
 
 #### Problems:
-- Raw data contains information on projects *and* contracts, where there may be many contracts associated with a single project. For this reason "project number" is not a sufficient distinction between datapoints.
+- Raw data contains information on projects *and* contracts, where there may be many contracts associated with a single project. For this reason "project number" is not a sufficient distinction between contracts.
 - "Project title" is generic in many cases - i.e., the same project titles will be reused for contracts with different project numbers. So, project title is also not sufficient for a unique identifier of contracts
 
 #### Solution:
