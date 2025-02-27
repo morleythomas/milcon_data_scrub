@@ -3,19 +3,53 @@
 
 This repo is desgined to produce a dataset from the raw files in `data/raw_data`
 
-This dataset contains all information from each contract over the DoD reports condensed into a single row per contract.
+These raw files contain updates about cost and schedule for construction contracts awarded by the US DoD.
 
-There are 1188 contracts in total.
+The dataset produced in this repo summarises these updates into a single row. There are 1188 rows in the final dataset, meaning 1188 different contracts with data from various points of progress in the contract works.
 
-The raw files are taken from the US department of defence public website.
+The raw files are taken from the US department of defence public website. https://www.acq.osd.mil/eie/imr/mc/library.html
 
 ## Contents of readme
 
-- Dataset: This contains descriptions and visualisations of the final dataset
-
-- Methodology: Sets out issues encountered within the data and what solutions were decided on
-
 - Directory: Guide to the layout of files in the repo
+
+- Dataset: This section contains descriptions and visualisations of the final dataset
+
+- Methodology: Sets out issues encountered within the data and what assumptions were made.
+
+
+## Directory
+
+### `notebooks`
+
+- `01: Extract Dataset From Raw Sheets.ipynb` - This notebook extracts the data from each of the source excel files, and homegnises the column headings. Exports a total
+sheet of all rows of data.
+
+- `02: Explore raw data structure.ipynb` - This notebook takes a closer look at the available features in the data, and reduces the set to contracts that can be uniquely
+identified. (i.e., removing rows where it is vague wether or not multiple rows belong to the same contract, or different ones)
+
+- `03: Create dataset for analysis.ipynb` - This notebook takes the unique contracts (after they had been manually coded into subtype and subtype 2) and "pivots" them, such
+that each row matches to a single contract, where cost and schedule updates are included in different columns. In this notebook, outliers or nonsensical data points 
+(such as negative durations) are inspected and sometimes trimmed from the dataset.
+
+- `04: Descriptive analysis.ipynb` - Visualisations and descriptive statistics on the final dataset.
+
+### `data`
+
+#### `datasets`
+
+- `all-contracts.csv` - Total full dataset after scraping together from raw milcon files
+- `all-unique-contracts.csv` - Dataset with vaguely named contracts removed, leaving contracts which we can be sure are unique
+- `unique-contracts-coded.xlsx` - Spreadsheet containing manually encoded categories for each unique contract in `all-unique-contracts-dataset.csv`
+- `dataset-for-overrun-analysis.csv` - Final dataset for analysis. All data entries aggregated so that each row reflects a single project, with overrun data at different stages entered in to different columns.
+
+#### `raw_data`
+
+Conatins the full set of raw files downloaded from https://www.acq.osd.mil/eie/imr/mc/library.html
+
+### `plots`
+
+Exports of visulisations produced in analysis that are used in this document.
 
 
 ## Dataset
@@ -430,34 +464,3 @@ available in `notebooks/03: Create dataset for analysis.ipynb`
 
 5% contingency is assumed to be included within the contract original budgets. So this 5% is manually stripped from the original contract amounts 
 before cost overruns are calculated. 
-
-## Directory
-
-### `notebooks`
-
-- `01: Extract Dataset From Raw Sheets.ipynb` - This notebook extracts the data from each of the source excel files, and homegnises the column headings. Exports a total
-sheet of all rows of data.
-
-- `02: Explore raw data structure.ipynb` - This notebook takes a closer look at the available features in the data, and reduces the set to contracts that can be uniquely
-identified. (i.e., removing rows where it is vague wether or not multiple rows belong to the same contract, or different ones)
-
-- `03: Create dataset for analysis.ipynb` - This notebook takes the unique contracts (after they had been manually coded into subtype and subtype 2) and "pivots" them, such
-that each row matches to a single contract, where cost and schedule updates are included in different columns. In this notebook, outliers or nonsensical data points 
-(such as negative durations) are inspected and sometimes trimmed from the dataset.
-
-- `04: Descriptive analysis.ipynb` - Visualisations and descriptive statistics on the final dataset.
-
-### `data`
-
-#### `datasets`
-
-- `all-contracts.csv` - Total full dataset after scraping together from raw milcon files
-- `all-unique-contracts.csv` - Dataset with vaguely named contracts removed, leaving contracts which we can be sure are unique
-- `unique-contracts-coded.xlsx` - Spreadsheet containing manually encoded categories for each unique contract in `all-unique-contracts-dataset.csv`
-- `dataset-for-overrun-analysis.csv` - Final dataset for analysis. All data entries aggregated so that each row reflects a single project, with overrun data at different stages entered in to different columns.
-
-#### `raw_data`
-
-### `plots`
-
-Exports of visulisations produced in analysis that are used by this document.
